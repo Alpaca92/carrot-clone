@@ -1,22 +1,44 @@
-import { useForm } from 'react-hook-form';
+import { useForm, FieldErrors } from 'react-hook-form';
+
+interface LoginForm {
+  username: string;
+  email: string;
+  password: string;
+}
 
 export default function Froms() {
-  const { register } = useForm();
+  const { register, handleSubmit } = useForm<LoginForm>();
+
+  const onValid = (data: LoginForm) => {};
+
+  const onInvalid = (errors: FieldErrors) => {};
 
   return (
-    <form>
+    <form onSubmit={handleSubmit(onValid, onInvalid)}>
       <input
-        {...register('username')}
+        {...register('username', {
+          required: 'username is requried',
+          minLength: {
+            value: 5,
+            message: 'The username should be longer than 5 characters',
+          },
+        })}
         type="text"
         placeholder="username"
-        required
       />
-      <input {...register('email')} type="email" placeholder="email" required />
       <input
-        {...register('password')}
+        {...register('email', {
+          required: 'email is requried',
+        })}
+        type="email"
+        placeholder="email"
+      />
+      <input
+        {...register('password', {
+          required: 'password is requried',
+        })}
         type="password"
         placeholder="password"
-        required
       />
       <input type="submit" value="create account" />
     </form>
