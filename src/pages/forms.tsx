@@ -7,7 +7,13 @@ interface LoginForm {
 }
 
 export default function Froms() {
-  const { register, handleSubmit } = useForm<LoginForm>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginForm>({
+    mode: 'onChange',
+  });
 
   const onValid = (data: LoginForm) => {};
 
@@ -29,10 +35,15 @@ export default function Froms() {
       <input
         {...register('email', {
           required: 'email is requried',
+          validate: {
+            notGmail: (value) =>
+              !value.includes('@gmail.com') || 'Gmail is not allowed',
+          },
         })}
         type="email"
         placeholder="email"
       />
+      <span>{errors.email?.message}</span>
       <input
         {...register('password', {
           required: 'password is requried',
