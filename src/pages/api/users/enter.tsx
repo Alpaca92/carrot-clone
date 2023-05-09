@@ -5,12 +5,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  await client.user.create({
-    data: {
-      name: 'user',
-      email: 'user@example.com',
-    },
-  });
+  if (req.method !== 'POST') res.status(401).end();
 
-  res.json({ ok: true, data: 'XX' });
+  console.log(req.body.email);
+  res.status(200).end();
 }
