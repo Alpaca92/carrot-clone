@@ -7,12 +7,8 @@ async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
-  console.log(req.method);
-
   if (req.method === 'GET') {
     const products = await client.product.findMany({});
-
-    console.log('on server: ', products);
 
     return res.json({
       ok: true,
