@@ -4,8 +4,8 @@ import withHandler, { ResponseType } from '@/libs/server/withHandler';
 import { NextApiRequest, NextApiResponse } from 'next';
 import twilio from 'twilio';
 
-mail.setApiKey(process.env.SENDGRID_KEY!);
-const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
+// mail.setApiKey(process.env.SENDGRID_KEY!);
+// const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
 
 async function handler(
   req: NextApiRequest,
@@ -19,7 +19,7 @@ async function handler(
   const payload = Math.floor(100000 + Math.random() * 90000) + '';
   const token = await client.token.create({
     data: {
-      payload, // for test
+      payload,
       user: {
         connectOrCreate: {
           where: {
