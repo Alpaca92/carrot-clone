@@ -5,19 +5,22 @@ export interface ResponseType {
   [key: string]: any;
 }
 
+type method = 'GET' | 'POST' | 'DELETE';
+
 interface ConfigType {
-  method: 'GET' | 'POST' | 'DELETE';
+  methods: method[];
   handler: (req: NextApiRequest, res: NextApiResponse) => void;
   isPrivate?: boolean;
 }
 
 export default function withHandler({
-  method,
+  methods,
   handler,
   isPrivate = true,
 }: ConfigType) {
   return async function (req: NextApiRequest, res: NextApiResponse) {
-    if (req.method !== method) return res.status(405).end();
+    if (req.method && !methods.includes(req.method as any)) // FIXME: use to 'method' instead of 'any'
+      return res.status(405).end();
     if (isPrivate && !req.session.user)
       return res.status(401).json({ ok: false, error: 'please login' }); // FIXME: 처음 사용자는 confirm 로직이 돌기 전에 세션을 체크하니까 계속 401을 return 함
 
