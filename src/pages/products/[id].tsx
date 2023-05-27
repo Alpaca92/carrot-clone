@@ -75,7 +75,7 @@ const ItemDetail: NextPage = () => {
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Similar items</h2>
           <div className=" mt-6 grid grid-cols-2 gap-4">
-            {data?.relatedProducts.map(
+            {data?.relatedProducts?.map(
               (
                 product // FIXME: have to be wrapped in <Link>
               ) => (

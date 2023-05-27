@@ -38,7 +38,6 @@ async function handler(
 
     res.json({
       ok: true,
-      product,
     });
   }
 }
