@@ -8,7 +8,6 @@ async function handler(
   res: NextApiResponse<ResponseType>
 ) {
   const { id } = req.query;
-
   const product = await client.product.findUnique({
     where: {
       id: Number(id),
@@ -24,9 +23,26 @@ async function handler(
     },
   });
 
+  const terms = product?.name.split(' ').map((word) => ({
+    name: {
+      contains: word,
+    },
+  }));
+  const relatedProducts = await client.product.findMany({
+    where: {
+      OR: terms,
+      AND: {
+        id: {
+          not: product?.id,
+        },
+      },
+    },
+  });
+
   res.json({
     ok: true,
     product,
+    relatedProducts,
   });
 }
 
