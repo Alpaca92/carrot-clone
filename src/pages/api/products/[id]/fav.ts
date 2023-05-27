@@ -18,30 +18,30 @@ async function handler(
     },
   });
 
-  res.json({ ok: true });
-}
+  if (alreadyExists) {
+    await client.fav.delete({
+      where: {
+        id: alreadyExists.id,
+      },
+    });
+  } else {
+    await client.fav.create({
+      data: {
+        user: {
+          connect: {
+            id: user?.id,
+          },
+        },
+        product: {
+          connect: {
+            id: Number(id),
+          },
+        },
+      },
+    });
+  }
 
-if (alreadyExists) {
-  await client.fav.delete({
-    where: {
-      id: alreadyExists.id,
-    },
-  });
-} else {
-  await client.fav.create({
-    data: {
-      user: {
-        connect: {
-          id: user?.id,
-        },
-      },
-      product: {
-        connect: {
-          id: Number(id),
-        },
-      },
-    },
-  });
+  res.json({ ok: true });
 }
 
 export default withApiSession(
