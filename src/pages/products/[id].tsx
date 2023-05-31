@@ -22,13 +22,15 @@ interface ItemDetailResponse {
 const ItemDetail: NextPage = () => {
   const router = useRouter();
 
-  const { data } = useSWR<ItemDetailResponse>(
+  const { data, mutate } = useSWR<ItemDetailResponse>(
     router.query.id ? `/api/products/${router.query.id}` : null
   );
 
   const [toggleFav] = useMutation(`/api/products/${router.query.id}/fav`);
   const onFavClick = () => {
     toggleFav({});
+    if (!data) return;
+    mutate({ ...data, isLiked: !data.isLiked }, false);
   };
 
   return (
@@ -65,7 +67,7 @@ const ItemDetail: NextPage = () => {
                 className={cls(
                   'flex items-center justify-center rounded-md p-3',
                   data?.isLiked
-                    ? 'text-red-500  hover:text-red-600'
+                    ? 'text-red-500 hover:text-red-600'
                     : 'text-gray-400 hover:bg-gray-100 hover:text-gray-500'
                 )}
               >
